@@ -24,7 +24,7 @@ function TextToHtmlFile(text,name) {
 }
 
 function download(text,name) {
-    download_gadget.href = "data:text/plain;content-disposition=attachment;filename=name," +text;
+    ddownload_gadget.href = "data:text/plain;charset=utf-8;filename=name," +encodeURIComponent(text);
     download_gadget.download = name;
     download_gadget.click();
 }
