@@ -1,0 +1,35 @@
+@media(max-width:1150px) {
+    .half-content {
+        width:100%;
+        align-items:center;
+    }
+    .actionPanel {
+        margin-top:25px;
+        justify-content: center;
+    }
+    .actionFrame:not(:first-child) {
+        margin-left:15px;
+    }
+    .itemlist {
+        width:95%;
+        max-width:700px;
+    }
+    .cnt {
+        margin-left:0;
+    }
+    .section-header {
+        margin-left:0;
+    }
+    .adaptive {
+        align-items:center;
+    }
+}
+
+@media(max-width:900px) {
+    .menu-sections {
+        display:none;
+    }
+    .side-menu, .burger-menu {
+        display:block;
+    }
+}
