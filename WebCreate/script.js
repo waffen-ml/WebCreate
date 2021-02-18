@@ -24,7 +24,7 @@ function TextToHtmlFile(text,name) {
 }
 
 function download(text,name) {
-    ddownload_gadget.href = "data:text/plain;charset=utf-8;filename=name," +encodeURIComponent(text);
+    download_gadget.href = "data:text/plain;charset=utf-8;filename=name," +encodeURIComponent(text);
     download_gadget.download = name;
     download_gadget.click();
 }
@@ -68,7 +68,9 @@ function UpdateAll() {
 }
 
 function DownloadPage() {
-    download(page.compilate(),page.fileName + ".html");
+    var str = page.compilate();
+    download(str,page.fileName + ".html");
+
 }
 
 function strweight(str) {
