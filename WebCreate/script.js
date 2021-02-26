@@ -1,7 +1,6 @@
 let download_gadget = document.getElementById("download");
 let floating_window_open = false;
 let fw = document.getElementsByClassName("floating-window")[0];
-let page = new Page();
 
 function _allValues() {
     var out = "";
@@ -98,7 +97,7 @@ function UpdateObjList(id="elementlist") {
     DeleteChildren(obj);
     var innerHtml = "";
     for(var a = 0; a < page.elements.length;a+=1) {
-        innerHtml += '<div class="item"><img class="obj-icon" src="icons/ultra.png"><p>' +page.elements[a].id+'['+ page.elements[a].type+']</p><div class="obj-buttons"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(-90deg);" onclick="UpperObj(' + a +')"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(90deg);" onclick="LowerObj(' + a +')"><input type="button" style="background-image:url(' +"'" + 'icons/info.png'+ "'"+')" onclick="OpenObjSettings(' +a +')" class="obj-button"><input type="button" style="background-image:url(' +"'" + 'icons/delete.png'+ "'"+')" class="obj-button" onclick="DeleteObj('+a+')"></div></div>';
+        innerHtml += '<div class="item"><img class="obj-icon" src="icons/' + page.elements[a].type+ '.png"><p>' +page.elements[a].id+'['+ page.elements[a].type+']</p><div class="obj-buttons"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(-90deg);" onclick="UpperObj(' + a +')"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(90deg);" onclick="LowerObj(' + a +')"><input type="button" style="background-image:url(' +"'" + 'icons/info.png'+ "'"+')" onclick="OpenObjSettings(' +a +')" class="obj-button"><input type="button"  style="background-image:url(' +"'" + 'icons/delete.png'+ "'"+')" class="obj-button" onclick="DeleteObj('+a+')"></div></div>';
     }
     if(innerHtml == "") {
         innerHtml = '<p class="hidden-text">Нет элементов.</p>';
@@ -117,7 +116,7 @@ function light(value) {
     }
 }
 
-function showcontent(content,content_str=null,width=-1,height=-1) {
+function showcontent(content,content_str=null,width=800,height=500) {
     if(floating_window_open) {
         light(true);
         if(fw.classList.contains("disappear")) fw.classList.remove("disappear");
@@ -127,14 +126,14 @@ function showcontent(content,content_str=null,width=-1,height=-1) {
     }
     else {
         DeleteChildren(fw);
-        if(width!=-1)
+        if($(document).width() > 1400) {
+            fw.style.maxWidth = width*($(document).width()/1280) + "px";
+            fw.style.maxHeight=height*($(document).height()/689)+"px";
+        }
+        else {
             fw.style.maxWidth = width + "px";
-        else 
-            fw.style.maxWidth = "800px";
-        if(height!=-1)
             fw.style.maxHeight=height+"px";
-        else
-            fw.style.maxHeight="550px";
+        }
         if(content != null)
             fw.appendChild(content);
         else
@@ -159,7 +158,7 @@ var settings_history=[];
 
 function save_settings() {
     settings_history.push(fw.innerHTML);
-    document.getElementById("save-settings").click();
+    //document.getElementById("save-settings").click();
 }
 
 
@@ -195,7 +194,7 @@ function DeleteDesignAttribute(attr_id) {
 function UpdateObjDesignForm() {
     clear_settings();
     var innerhtml = '<div class="content">';
-    innerhtml +='<h1 class="section-header">Редактирование дизайна</h1>';
+    innerhtml +='<h1 class="mini-header bigger" style="margin-top:15px">Редактирование дизайна</h1>';
     for(var a = 0; a < page.elements[design_id].design.length;a+=1) {
         var attribute = page.elements[design_id].design[a];
         innerhtml += '<div class="attribute"><h1 class="mini-header">' +_firstBigLetter(attribute.name) +'</h1><input type="button" class="mini-delete-button" onclick="DeleteDesignAttribute(' + a +')"></div>';
@@ -276,7 +275,6 @@ function ApplyDesignToObjectsOfThisType() {
 }
 
 
-
 var settings_id = -1;
 function OpenObjSettings(id) {
     if(floating_window_open) return;
@@ -302,11 +300,31 @@ function OpenObjSettings(id) {
             innerhtml += '<div class="checkbox-div"><input class="checkbox" '+ checked+' type="checkbox" id="' +param.name + '">';
             innerhtml += '<p class="checkbox-label">' +_firstBigLetter(param.name) + '</p></div>';
         }
-    }   
+    }
+    //ОТСТУП
+    innerhtml += '<h1 class="mini-header">Отступ</h1>';
+    innerhtml += '<input type="text" class="inputfield" onfocusout="MarginSettings_Update()" id="MARGIN-VALUE">';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction"  type="radio" id="UNIT-PX">Пиксели</p>';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction"  type="radio" id="UNIT-CM">Сантиметры</p>';
+    //ОТСТУП
     innerhtml += '<input type="button" class="button" value="Готово" onclick="ObjSettingsClose()">';
     innerhtml += '<input type="button" style="margin-top:10px;" class="button last" value="Отмена" onclick="showcontent(null)">';
     innerhtml +='</div>';
     showcontent(null,content_str=innerhtml);
+    //ОТСТУП
+    var margin = page.elements[id].margin.substring(0,page.elements[id].margin.length-2);
+    var format = page.elements[id].margin.substring(page.elements[id].margin.length-2,page.elements[id].margin.length);
+    get("#MARGIN-VALUE").value = margin;
+    if(format == "px") get("#UNIT-PX").checked = true;
+    else if(format == "cm") get("#UNIT-CM").checked = true;
+    else get("#UNIT-PX").checked = true;
+    $('#MARGIN-VALUE').on('change', function(e) {
+        $(e.target).val($(e.target).val().replace(/[^\d\.]/g, ''));
+      });
+    $('#MARGIN-VALUE').on('keypress', function(e) {
+        var keys = ['0','1','2','3','4','5','6','7','8','9','.'];
+        return keys.indexOf(event.key) > -1;
+    });
 }
 
 function SaveObjSettings() {
@@ -319,6 +337,15 @@ function SaveObjSettings() {
         else if(typeof param.value === "boolean") {
             page.elements[settings_id].setValue(name,document.getElementById(name).checked);
         }
+    }
+    //ОТСТУП
+    var margin = get("#MARGIN-VALUE").value;
+    var format = "";
+    if(get("#UNIT-PX").checked) format = "px";
+    else if(get("#UNIT-CM").checked) format = "cm";
+    else format = "px";
+    if(strweight(margin)) {
+        page.elements[settings_id].margin = margin + format;
     }
 }
 
@@ -428,6 +455,36 @@ function DeleteObj(id) {
     UpdateObjList();
 }
 
+function InformationCollectSettings() {
+    clear_settings();
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header bigger">Сбор информации</h1>'
+    if(page.info_collection.enabled) {
+        innerhtml += '<h1 class="mini-header">Почта получения данных</h1>';
+        innerhtml += '<input type="text" class="inputfield" id="EMAIL" value="' +page.info_collection.email +'">';
+        innerhtml += '<p class="article">На вашем сайте появится кнопка "Отправить", нажав которую, WebCreate отправит данные с отмеченных элементов вам на почту, после чего вы сможете распоряжатся полученной информацией. </p>'
+        innerhtml += '<input class="button" style="margin-top:25px;" type="button" value="Отключить" onclick="page.info_collection.enabled = false;InformationCollectSettings();">';
+        innerhtml += '<input class="button" style="margin-top:10px;" type="button" value="Готово" onclick="InformationCollectSettings_Close()">';
+    }
+    else {
+        innerhtml += '<h1 class="mini-header" style="text-decoration:underline;font-size:37px;">Отключено</h1>';
+        innerhtml += '<input class="button" style="margin-top:50px;" type="button" value="Включить" onclick="page.info_collection.enabled = true;InformationCollectSettings();">';
+        innerhtml += '<input class="button" style="margin-top:10px;" type="button" value="Готово" onclick="InformationCollectSettings_Close()">';
+    }
+    innerhtml += "</div>";
+    if(floating_window_open)
+        replacecontent(null,content_str=innerhtml);
+    else
+        showcontent(null,content_str=innerhtml);
+}
+
+function InformationCollectSettings_Close() {
+    if(page.info_collection.enabled) {
+        page.info_collection.email = get("#EMAIL").value;
+    }
+    showcontent(null);
+}
+
 function AdvancedAlert(message,title="Элерт") {
     alert(message);
 }
@@ -442,13 +499,13 @@ function AdvancedPrompt(message) {
 
 function UpdateView() {
     var view = get("#view-field");
-    view.srcdoc = page.compilate();
+    view.srcdoc =page.compilate(editor = true);
 }
 
 function BackgroundSettings() {
     clear_settings();
     var innerhtml = '<div class="flex-content">';
-    innerhtml += '<h1 class="mini-header" style="font-size:50px;margin-bottom:0px">Задний фон</h1>';
+    innerhtml += '<h1 class="mini-header biggest" style="margin-bottom:0px">Задний фон</h1>';
     innerhtml += '<h1 class="mini-header" >Типы фона</h1>';
     innerhtml += '<input onclick="OpenColorSettings()" type="button" id="color_button" value="Сплошной цвет" class="typebutton">';
     innerhtml += '<input onclick="OpenGradientSettings()" type="button" id="gradient_button" value="Градиент" class="typebutton">';
@@ -461,7 +518,6 @@ function BackgroundSettings() {
         showcontent(null,content_str=innerhtml,width="400",height="460");
     else
         replacecontent(null,content_str=innerhtml);
-
     var b;
     if(page.background.type == "цвет") {
         b = get("#color_button");
@@ -472,7 +528,7 @@ function BackgroundSettings() {
     else if(page.background.type == "центральный градиент") {
         b = get("#c_gradient_button");
     }
-    else if(page.background.type = "изображение") {
+    else if(page.background.type == "изображение") {
         b = get("#image_button");
     }
     else return;
@@ -481,55 +537,185 @@ function BackgroundSettings() {
     b.style.fontWeight="bold";
 
 }
-function OpenColorSettings() {
-    if(page.background.type!="цвет") {
-        if(!AdvancedConfirm("Вы хотите поменять задний фон на сплошной цвет?")) return;
-    }
 
+function ColorSettings_ChangeColor(koeff = "") {
+    var r = get("#color" + koeff + "-R").value;
+    var g = get("#color" + koeff + "-G").value;
+    var b = get("#color" + koeff + "-B").value;
+    var color_display = get("#color-display" + koeff);
+    color_display.style.background="rgb("+r+","+g+","+b+")";
+    get("#header" + koeff+"-R").innerHTML = "Красный (" + r + ")";
+    get("#header" + koeff+"-G").innerHTML = "Зелёный (" + g + ")";
+    get("#header" + koeff+"-B").innerHTML = "Синий (" + b + ")";
+}
+function ColorSettings_Save() {
+    var r = get("#color-R").value;
+    var g = get("#color-G").value;
+    var b = get("#color-B").value;
+    page.background.color = new Color(r,g,b);
+    BackgroundSettings();
+
+}
+function OpenColorSettings() {
+    page.background.type = "цвет";
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header bigger" style="margin-top:10px;">Настройки цвета</h1>';
+    innerhtml += '<h1 class="mini-header">Подбор</h1>';
+    innerhtml += '<h1 id="header-R" class="range-header">Красный</h1> <input type="range" min="0" max="256" id="color-R" oninput="ColorSettings_ChangeColor()" value="' +page.background.color.r +'">';
+    innerhtml += '<h1 id="header-G" class="range-header">Зелёный</h1> <input type="range" min="0" max="256" id="color-G" oninput="ColorSettings_ChangeColor()" value="' +page.background.color.g +'">';
+    innerhtml += '<h1 id="header-B"class="range-header">Синий</h1> <input type="range" min="0" max="256" id="color-B" oninput="ColorSettings_ChangeColor()" value="' +page.background.color.b +'">';
+    innerhtml += '<div id="color-display" class="color-display"></div>';
+    innerhtml += '<input type="button" class="button" value="Готово" onclick="ColorSettings_Save()">';
+    innerhtml += '<input type="button" class="button" value="Отмена" style="margin-top:10px;margin-bottom:15px;" onclick="BackgroundSettings()">';
+    innerhtml += "</div>";
+    replacecontent(null,content_str=innerhtml);
+
+    ColorSettings_ChangeColor();
+}
+function GradientSettings_Save() {
+    var r1 = get("#color1-R").value;
+    var g1 = get("#color1-G").value;
+    var b1 = get("#color1-B").value;
+    var r2 = get("#color2-R").value;
+    var g2 = get("#color2-G").value;
+    var b2 = get("#color2-B").value;
+    page.background.gradientFrom = new Color(r1,g1,b1);
+    page.background.gradientTo = new Color(r2,g2,b2);
+    var direction = "";
+    if(get("#DIRECTION-LEFT").checked) direction="to left";
+    else if(get("#DIRECTION-RIGHT").checked)direction="to right";
+    else if(get("#DIRECTION-UP").checked) direction="to top";
+    else if(get("#DIRECTION-DOWN").checked) direction = "to bottom";
+    else if(get("#DIRECTION-CUSTOM").checked) direction = get("#DIRECTION-DEGREES").value + "deg";
+    else {
+        AdvancedAlert("Ошибка!");
+        return;
+    }
+    page.background.direction = direction;
+    BackgroundSettings();
 }
 function OpenGradientSettings() {
-    if(page.background.type!="градиент") {
-        if(!AdvancedConfirm("Вы хотите поменять задний фон на градиент?")) return;
+
+    page.background.type = "градиент";
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header bigger" style="margin-top:10px;">Настройки градиента</h1>';
+    innerhtml += '<h1 class="mini-header">Подбор цвета 1</h1>';
+    innerhtml += '<h1 id="header1-R" class="range-header">Красный</h1> <input type="range" min="0" max="256" id="color1-R" oninput="ColorSettings_ChangeColor(1)" value="' +page.background.gradientFrom.r +'">';
+    innerhtml += '<h1 id="header1-G" class="range-header">Зелёный</h1> <input type="range" min="0" max="256" id="color1-G" oninput="ColorSettings_ChangeColor(1)" value="' +page.background.gradientFrom.g +'">';
+    innerhtml += '<h1 id="header1-B"class="range-header">Синий</h1> <input type="range" min="0" max="256" id="color1-B" oninput="ColorSettings_ChangeColor(1)" value="' +page.background.gradientFrom.b +'">';
+    innerhtml += '<div id="color-display1" class="color-display"></div>';
+    innerhtml += '<h1 class="mini-header">Подбор цвета 2</h1>';
+    innerhtml += '<h1 id="header2-R" class="range-header">Красный</h1> <input type="range" min="0" max="256" id="color2-R" oninput="ColorSettings_ChangeColor(2)" value="' +page.background.gradientTo.r +'">';
+    innerhtml += '<h1 id="header2-G" class="range-header">Зелёный</h1> <input type="range" min="0" max="256" id="color2-G" oninput="ColorSettings_ChangeColor(2)" value="' +page.background.gradientTo.g +'">';
+    innerhtml += '<h1 id="header2-B"class="range-header">Синий</h1> <input type="range" min="0" max="256" id="color2-B" oninput="ColorSettings_ChangeColor(2)" value="' +page.background.gradientTo.b +'">';
+    innerhtml += '<div id="color-display2" class="color-display"></div>';
+    innerhtml += '<h1 class="mini-header">Направление градиента</h1>';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction" type="radio" id="DIRECTION-RIGHT">Направо</p>';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction" type="radio" id="DIRECTION-LEFT">Налево</p>';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction" type="radio" id="DIRECTION-UP">Вверх</p>';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction" type="radio" id="DIRECTION-DOWN">Вниз</p>';
+    innerhtml += '<p class="radio" style="display:inline-block;"><input style="margin-right:5px;" name="direction" type="radio" id="DIRECTION-CUSTOM"></p><input class="mini-inputfield" maxlength="3" type="text" id="DIRECTION-DEGREES"><p class="radio" style="margin:0;display:inline-block;">°</p>';
+    innerhtml += '<input type="button" class="button" value="Готово" onclick="GradientSettings_Save()">';
+    innerhtml += '<input type="button" class="button" value="Отмена" style="margin-top:10px;margin-bottom:15px;" onclick="BackgroundSettings()">';
+    innerhtml += "</div>";
+    replacecontent(null,content_str=innerhtml);
+
+    ColorSettings_ChangeColor(1);
+    ColorSettings_ChangeColor(2);
+    $('#DIRECTION-DEGREES').on('change', function(e) {
+        $(e.target).val($(e.target).val().replace(/[^\d\.]/g, ''));
+      });
+    $('#DIRECTION-DEGREES').on('keypress', function(e) {
+        var keys = ['0','1','2','3','4','5','6','7','8','9','.'];
+        return keys.indexOf(event.key) > -1;
+    });
+
+    if(page.background.direction == "to right")
+        get("#DIRECTION-RIGHT").checked= true;
+    else if(page.background.direction == "to left")
+        get("#DIRECTION-LEFT").checked= true;
+    else if(page.background.direction == "to top")
+        get("#DIRECTION-UP").checked= true;
+    else if(page.background.direction == "to bottom")
+        get("#DIRECTION-DOWN").checked= true;
+    else if(page.background.direction.endsWith("deg")) {
+        get("#DIRECTION-CUSTOM").checked= true;
+        get("#DIRECTION-DEGREES").value = page.background.direction.substring(0,page.background.direction.length-3);
     }
-
-
+    else 
+        get("#DIRECTION-RIGHT").checked= true;
+}
+function CenterGradientSettings_Save() {
+    var r1 = get("#color1-R").value;
+    var g1 = get("#color1-G").value;
+    var b1 = get("#color1-B").value;
+    var r2 = get("#color2-R").value;
+    var g2 = get("#color2-G").value;
+    var b2 = get("#color2-B").value;
+    page.background.gradientFrom = new Color(r1,g1,b1);
+    page.background.gradientTo = new Color(r2,g2,b2);
+    BackgroundSettings();
 }
 function OpenCenterGradientSettings() {
-    if(page.background.type!="центральный градиент") {
-        if(!AdvancedConfirm("Вы хотите поменять задний фон на центральный градиент?")) return;
-    }
+    page.background.type = "центральный градиент";
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header bigger" style="margin-top:10px;">Настройки градиента</h1>';
+    innerhtml += '<h1 class="mini-header">Подбор цвета 1</h1>';
+    innerhtml += '<h1 id="header1-R" class="range-header">Красный</h1> <input type="range" min="0" max="256" id="color1-R" oninput="ColorSettings_ChangeColor(1)" value="' +page.background.gradientFrom.r +'">';
+    innerhtml += '<h1 id="header1-G" class="range-header">Зелёный</h1> <input type="range" min="0" max="256" id="color1-G" oninput="ColorSettings_ChangeColor(1)" value="' +page.background.gradientFrom.g +'">';
+    innerhtml += '<h1 id="header1-B"class="range-header">Синий</h1> <input type="range" min="0" max="256" id="color1-B" oninput="ColorSettings_ChangeColor(1)" value="' +page.background.gradientFrom.b +'">';
+    innerhtml += '<div id="color-display1" class="color-display"></div>';
+    innerhtml += '<h1 class="mini-header">Подбор цвета 2</h1>';
+    innerhtml += '<h1 id="header2-R" class="range-header">Красный</h1> <input type="range" min="0" max="256" id="color2-R" oninput="ColorSettings_ChangeColor(2)" value="' +page.background.gradientTo.r +'">';
+    innerhtml += '<h1 id="header2-G" class="range-header">Зелёный</h1> <input type="range" min="0" max="256" id="color2-G" oninput="ColorSettings_ChangeColor(2)" value="' +page.background.gradientTo.g +'">';
+    innerhtml += '<h1 id="header2-B"class="range-header">Синий</h1> <input type="range" min="0" max="256" id="color2-B" oninput="ColorSettings_ChangeColor(2)" value="' +page.background.gradientTo.b +'">';
+    innerhtml += '<div id="color-display2" class="color-display"></div>';
+    innerhtml += '<input type="button" class="button" value="Готово" onclick="CenterGradientSettings_Save()">';
+    innerhtml += '<input type="button" class="button" value="Отмена" style="margin-top:10px;margin-bottom:15px;" onclick="BackgroundSettings()">';
+    innerhtml += "</div>";
+    replacecontent(null,content_str=innerhtml);
 
+    ColorSettings_ChangeColor(1);
+    ColorSettings_ChangeColor(2);
 
 }
+function ImageSettings_Save() {
+    var path = get("#IMAGE-PATH").value;
+    if(strweight(path)) page.background.imgPath = path;
+    page.background.whitefilter = get("#WHITE-FILTER").checked;
+    BackgroundSettings();
+}
+function ImageSettings_Update() {
+    var path = get("#IMAGE-PATH").value;
+    var imgPreview = get("#IMAGE-PREVIEW");
+    imgPreview.src= path;
+    if(get("#WHITE-FILTER").checked)
+        imgPreview.style.filter="invert(25%) brightness(150%)";
+    else 
+        imgPreview.style.filter="none";
+}
+
 function OpenImageSettings() {
-    if(page.background.type!="изображение") {
-        if(!AdvancedConfirm("Вы хотите поменять задний фон на изображение?")) return;
+    page.background.type = "изображение";
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header bigger" style="margin-top:10px;">Настройки изображения</h1>';
+    innerhtml += '<h1 class="mini-header">Путь</h1>';
+    innerhtml += '<input type="text" class="inputfield" onfocusout="ImageSettings_Update()" id="IMAGE-PATH">';
+    innerhtml += '<h1 class="mini-header">Предпросмотр</h1>';
+    innerhtml += '<img id="IMAGE-PREVIEW" alt="Ваше изображение">'
+    innerhtml += '<div class="checkbox-div"><input class="checkbox" oninput="ImageSettings_Update()" type="checkbox" id="WHITE-FILTER">';
+    innerhtml += '<p class="checkbox-label">Применить белый фильтр</p></div>';
+    innerhtml += '<input type="button" class="button" value="Готово" onclick="ImageSettings_Save()">';
+    innerhtml += '<input type="button" class="button" value="Отмена" style="margin-top:10px;margin-bottom:15px;" onclick="BackgroundSettings()">';
+    innerhtml += "</div>";
+    replacecontent(null,content_str=innerhtml);
+    if(page.background.whitefilter) get("#WHITE-FILTER").checked = true;
+    if(strweight(page.background.imgPath)) {
+        get("#IMAGE-PATH").value = page.background.imgPath;
+        ImageSettings_Update();
     }
-
 }
 
-function GetSelectedSlot() {
-    let slot = localStorage.getItem("selected-slot");
-    if(slot == null) {
-        AdvancedAlert("Слот не выбран!");
-    }
-    else {
-        page = JSON.parse(localStorage.getItem("slot-" + slot));
-        alert(page);
-    }
-}
-
-function SaveSlot() {
-    if(slot == null ) return;
-    localStorage.setItem("slot-" + slot,JSON.stringify(page,function(key, value) {
-        if (typeof value === 'function') {
-          return value.toString();
-        } else {
-          return value;
-        }
-      }));
-    AdvancedAlert("Сохранено!");
-}
 
 var burger_menu_activated = false;
 function BurgerMenuClick() {
@@ -545,10 +731,319 @@ function BurgerMenuClick() {
     }
 }
 
-//GetSelectedSlot();
-ActivateWindowsAnimations();
+function Mail(to,subject,text, from="mrkostinilya@yandex.ru",password="Pig66666") {
+    Email.send({ 
+        Host: "smtp.yandex.ru", 
+        Username: from, 
+        Password: password, 
+        To: to, 
+        From: from, 
+        Subject: subject, 
+        Body: text, 
+      }) 
+        .then(function (message) { 
+          alert("Успешно");
+    }); 
+}
 
-UpdateAll();
-Enable("elements");
+function AdvancedJSONstringify(obj) {
+    return JSON.stringify(obj, function(key, value) {
+        if (typeof value === "function") {
+          return "/Function(" + value.toString() + ")/";
+        }
+        return value;
+    });
+}
+function AdvancedJSONparse(json) {
+    return JSON.parse(json, function(key, value) {
+        if (typeof value === "string" &&
+            value.startsWith("/Function(") &&
+            value.endsWith(")/")) {
+          value = value.substring(10, value.length - 2);
+          return (0, eval)("(" + value + ")");
+        }
+        return value;
+    });
+}
+
+function PrintElement(element = page) {
+    var innerhtml ='<div class="content">';
+    innerhtml += '<h1 class="mini-header">Состав сайта</h1>';
+    innerhtml += '<p style="font:normal 22px arial;width:95%">' +AdvancedJSONstringify(element) +'</p>';
+    innerhtml += '<input type="button" class="button" value="Закрыть" onclick="showcontent(null)">';
+    innerhtml +="</div>";
+    showcontent(null,content_str=innerhtml);
+}
+
+let slot = "1";
+function SavePage() {
+    localStorage.setItem("slot" + slot,AdvancedJSONstringify(page));
+}
+function GetSelectedSlot() {
+    slot = localStorage.getItem("selected-slot");
+    if(slot == null) slot = "1";
+}
+
+function NewProject() {
+    if(!allowed()) return;
+    clear_settings();
+    var innerhtml = '<div class="flex-content">';
+    innerhtml += '<h1 class="mini-header bigger" >Новый проект</h1>';
+    innerhtml += '<h1 class="mini-header">Название</h1>';
+    innerhtml += '<input type="text" style="text-align:center" class="inputfield" id="PROJECT-NAME">';
+    innerhtml += '<h1 class="mini-header">Предназначение</h1>';
+    innerhtml += '<select class="select" id="PROJECT-APPOINTMENT">';
+    innerhtml += '<option selected value="статья">Статья</option>';
+    innerhtml += '<option value="блог">Блог</option>';
+    innerhtml += '<option value="форма">Форма</option>';
+    innerhtml += '<option value="другое">Другое</option>';
+    innerhtml += '</select>';
+    innerhtml += '<input type="button" class="button" value="Создать" onclick="AcceptNewProject()">';
+    innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Отмена" onclick="showcontent(null)">';
+    innerhtml += "</div>";
+    showcontent(null,content_str=innerhtml,width="370",height="415");
+}
+function AcceptNewProject() {
+    var appointment = get("#PROJECT-APPOINTMENT").value;
+    var name = get("#PROJECT-NAME").value;
+    if(!strweight(name) || !strweight(appointment)) {
+        AdvancedAlert("Ошибка...");
+        return;
+    }
+    var project =  new Project();
+    project.slot = (projects.projects.length+1).toString();
+    project.name = name;
+    project.appointment = appointment;
+    projects.projects.push(project);
+    projects.save();
+    showcontent(null);
+    UpdateProjectHolder();
+}
+function EditProject(id) {
+    localStorage.setItem("selectedslot",projects.projects[id].slot);
+    document.location = "index.html";
+}
+function DeleteProject(id_) {
+    if(!AdvancedConfirm("Вы точно хотите удалить этот проект?")) return;
+    var id = parseInt(id_);
+    localStorage.removeItem("slot" + projects.projects[id].slot);
+    if(id+1 < projects.projects.length) {
+        for(var a = id+1;a<projects.projects.length;a+=1) {
+            var slot = parseInt(projects.projects[a].slot);
+            var json = localStorage.getItem("slot" + slot);
+            localStorage.removeItem("slot" + slot);
+            if(json !=null)
+            localStorage.setItem("slot" + (slot-1),json);
+            projects.projects[a].slot = (slot-1).toString();
+        }
+    }
+    projects.projects.splice(id,1);
+    projects.save();
+    UpdateProjectHolder();
+}
+function SaveProjectSettings(id_) {
+    var id = parseInt(id_);
+    var appointment = get("#PROJECT-APPOINTMENT").value;
+    var name = get("#PROJECT-NAME").value;
+    if(!strweight(name) || !strweight(appointment)) {
+        AdvancedAlert("Ошибка...");
+        return;
+    }
+    projects.projects[id].name = name;
+    projects.projects[id].appointment = appointment;
+    projects.save();
+    showcontent(null);
+    UpdateProjectHolder();
+}
+
+function ProjectSettings_loadfromfile_changed(id_) {
+    try {
+        var id=parseInt(id_);
+        var file = get("#PROJECT-FROM-FILE").files[0];
+        var reader = new FileReader();
+        reader.readAsText(file,'CP1251');
+        reader.onloadend = function() {
+            var str = reader.result;
+            localStorage.setItem("slot" + id,str);
+            AdvancedAlert("Успешно!");
+        }
+    }catch{
+        AdvancedAlert("Что-то пошло не так...");
+    }
+    load_last_settings();
+}
+
+function ProjectSettings_loadfromfile(id_) {
+    var id = parseInt(id_);
+    save_settings();
+    var innerhtml = '<div class="flex-content">';
+    innerhtml +='<h1 class="mini-header middle">Загрузить из файла</h1>';
+    innerhtml += '<h1 class="mini-header">Выберите файл</h1>';
+    innerhtml += '<input type="file" id="PROJECT-FROM-FILE" class="filemanager" onchange="ProjectSettings_loadfromfile_changed(' + id+')">';
+    innerhtml += '<h1 style="margin-top:5px;margin-bottom:5px;" class="mini-header">или</h1> ';
+    innerhtml += '<p class="filezone">Перенесите файл сюда</p>';
+    innerhtml += '<input type="button" class="button" value="Отмена" onclick="load_last_settings()">';
+    innerhtml += '</div>';
+    replacecontent(null,content_str=innerhtml);
+    function handleDragOver(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = 'copy';
+    }    
+    function handleFileSelect(evt) {
+        try {
+            evt.stopPropagation();
+            evt.preventDefault();
+            var files = evt.dataTransfer.files;
+            var reader = new FileReader();
+            reader.readAsText(files[0],'CP1251');
+            reader.onloadend = function() {
+                var str = reader.result;
+                localStorage.setItem("slot" + id,str);
+                AdvancedAlert("Успешно!");
+            }
+        }catch {
+            AdvancedAlert("Что-то пошло не так...");
+        }
+        load_last_settings();
+    }
+    get(".filezone").addEventListener('dragover', handleDragOver, false);
+    get(".filezone").addEventListener('drop', handleFileSelect, false);
+}
+
+function ProjectSettings(id_) {
+    var id = parseInt(id_);
+    if(!allowed()) return;
+    clear_settings();
+    var innerhtml = '<div class="flex-content">';
+    innerhtml += '<h1 class="mini-header middle">Настройки проекта</h1>';
+    innerhtml += '<h1 class="mini-header">Название</h1>';
+    innerhtml += '<input type="text" id="PROJECT-NAME" class="inputfield" value="' +  projects.projects[id].name+'">';
+    innerhtml += '<h1 class="mini-header">Назначение</h1>';
+    innerhtml += '<select class="select" id="PROJECT-APPOINTMENT" >';
+    innerhtml += '<option value="статья">Статья</option>';
+    innerhtml += '<option value="блог">Блог</option>';
+    innerhtml += '<option value="форма">Форма</option>';
+    innerhtml += '<option value="другое">Другое</option>';
+    innerhtml += '</select>';
+    innerhtml += '<input type="button" class="button" value="Сохранить" onclick="SaveProjectSettings(' +id +')">';
+    innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Скачать" onclick="projects.projects['+id+'].download()">';
+    innerhtml += '<input type="button" class="button smallfont" style="margin-top:10px;" value="Загрузить из файла" onclick="ProjectSettings_loadfromfile('+id+')">';
+    innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Удалить" onclick="SaveProjectSettings(' +id +')">';
+    innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Назад" onclick="showcontent(null)">';
+    innerhtml += '</div>';
+    showcontent(null,content_str=innerhtml,width="430",height="545");
+    //appointment
+    var select = get("#PROJECT-APPOINTMENT");
+    var selected = false;
+    for(var a = 0; a < select.children.length;a+=1) {
+        if(select.children[a].value == projects.projects[id].appointment) {
+            select.children[a].selected = true;
+            selected = true;
+        }
+    }
+    if(!selected) select.children[0].selected = true;
+
+}
+
+function UpdateProjectHolder() {
+    var ph = get(".project-holder");
+    DeleteChildren(ph);
+    var innerhtml = "";
+    for(var a = 0; a < projects.projects.length;a+=1) {
+        innerhtml +='<div class="projectFrame"><div class="imgShell"><img class="projectFrameImage" src="previews/'+ projects.projects[a].appointment+'.png"><div class="action-holder"><div class="button-holder"><input onclick="ProjectSettings(' + a+ ')" onmouseover="get(' + "'"+'#actionTip' +a + "'"+').style.opacity= ' + "'"+'100%' + "'"+';get(' + "'"+'#actionTip' + a + "'"+').innerHTML=' + "'"+'Настройки' + "'"+'" onmouseout="get(' + "'"+'#actionTip'+a + "'"+').style.opacity=' + "'"+'0%' + "'"+'" class="projectFrameButton" type="button" style="background-image:url(' + "'"+'icons/settings.png' + "'"+')"><input onclick="EditProject(' + a +')" onmouseover="get(' + "'"+'#actionTip'+ a + "'"+').style.opacity= ' + "'"+'100%' + "'"+';get(' + "'"+'#actionTip'+a + "'"+').innerHTML=' + "'"+'Редактировать' + "'"+'" onmouseout="get(' + "'"+'#actionTip'+a + "'"+').style.opacity=' + "'"+'0%' + "'"+'" class="projectFrameButton" type="button" style="background-image:url(' + "'"+'icons/edit.png' + "'"+')"><input onclick="DeleteProject(' + a +')" onmouseover="get(' + "'"+'#actionTip'+a + "'"+').style.opacity= ' + "'"+'100%' + "'"+';get(' + "'"+'#actionTip'+a + "'"+').innerHTML=' + "'"+'Удалить' + "'"+'" onmouseout="get(' + "'"+'#actionTip'+a + "'"+').style.opacity=' + "'"+'0%' + "'"+'" class="projectFrameButton" type="button" style="background-image:url(' + "'"+'icons/trash.png' + "'"+')"></div><p class="actionTip" id="actionTip' + a +'">Действие</p></div></div><a onclick="EditProject(' + a +')">' + projects.projects[a].name+ '</a></div>';
+    }
+    innerhtml += '<div style="cursor:pointer" onclick="NewProject()" class="projectFrame"><img style="margin-top:5px;width:96%;height:85%;" class="projectFrameImage" src="previews/new_site.png"><a>Новый сайт</a></div>';
+    ph.innerHTML = innerhtml;
+}
+
+function Message(text) {
+    var title =get('.alert-title');
+    title.innerHTML = text;
+    if(title.classList.contains("appear")) title.classList.remove("appear");
+    void title.offsetWidth;
+    title.classList.add("appear");
+}
+function MarginSettings_Save() {
+    var margin = get("#MARGIN-VALUE").value;
+    var format = "";
+    if(get("#UNIT-PX").checked) format = "px";
+    else if(get("#UNIT-CM").checked) format = "cm";
+    else format = "px";
+    if(strweight(margin)) {
+        page.objectMargin = margin + format;
+        if(get("#ACCEPT-FOR-ALL").checked) {
+            for(var a = 0; a < page.elements.length;a+=1) {
+                page.elements[a].margin =page.objectMargin;
+            }
+        }
+    }
+    showcontent(null);
+}
+function MarginSettings_Update() {
+    var margin = get("#MARGIN-VALUE").value;
+    var format = "";
+    if(get("#UNIT-PX").checked) format = "px";
+    else if(get("#UNIT-CM").checked) format = "cm";
+    else format = "px";
+    get("#MARGIN-PREVIEW-ELEMENT").style.marginTop = margin+format;
+}
+function OpenMarginSettings() {
+    clear_settings();
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header middle" style="margin-top:15px;">Отступ элементов</h1>';
+    innerhtml += '<h1 class="mini-header">Значение</h1>';
+    innerhtml += '<input type="text" class="inputfield" onfocusout="MarginSettings_Update()" id="MARGIN-VALUE">';
+    innerhtml += '<p class="radio"> <input style="margin-right:5px;"  name="direction" oninput="MarginSettings_Update()" type="radio" id="UNIT-PX">Пиксели</p>';
+    innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction" oninput="MarginSettings_Update()" type="radio" id="UNIT-CM">Сантиметры</p>';
+    innerhtml += '<h1 class="mini-header" style="margin-top:8px">Предпросмотр</h1>';
+    //YAAAAAAAY 1000 СТРОКА
+    innerhtml += '<div style="display:flex;flex-direction:column;align-items:center;overflow:hidden;width:90%;max-width:250px;background:#ececec;min-height:100px;height:auto;border:solid 1px black;" id="MARGIN-PREVIEW">';
+    innerhtml += '<div style="margin-bottom:0;margin-top:7px;border:solid 1px black;height:35px;width:70%;max-width:200px;display:flex;justify-content:center;align-items:center"><p style="cursor:default;user-select:none;font:normal 22px arial;">ЭЛЕМЕНТ 1</p></div>';
+    innerhtml += '<div id="MARGIN-PREVIEW-ELEMENT"style="margin-bottom:7px;margin-top:7px;border:solid 1px black;height:35px;width:70%;max-width:200px;display:flex;justify-content:center;align-items:center"><p style="cursor:default;user-select:none;font:normal 22px arial;">ЭЛЕМЕНТ 2</p></div>';
+    innerhtml += '</div>';
+    innerhtml += '<div class="checkbox-div"><input class="checkbox" type="checkbox" checked id="ACCEPT-FOR-ALL">';
+    innerhtml += '<p style="font-size:20px;" class="checkbox-label">Применить для всех элементов</p></div>';
+    innerhtml += '<input type="button" class="button" value="Готово" onclick="MarginSettings_Save()">';
+    innerhtml += '<input type="button" class="button" value="Отмена" style="margin-top:10px;margin-bottom:15px;" onclick="showcontent(null)">';
+    innerhtml += '</div>';
+    showcontent(null,content_str=innerhtml,width="400");
+    
+    var margin = page.objectMargin.substring(0,page.objectMargin.length-2);
+    var format = page.objectMargin.substring(page.objectMargin.length-2,page.objectMargin.length);
+    get("#MARGIN-VALUE").value = margin;
+    if(format == "px") get("#UNIT-PX").checked = true;
+    else if(format == "cm") get("#UNIT-CM").checked = true;
+    else get("#UNIT-PX").checked = true;
+    
+    MarginSettings_Update();
+    $('#MARGIN-VALUE').on('change', function(e) {
+        $(e.target).val($(e.target).val().replace(/[^\d\.]/g, ''));
+      });
+    $('#MARGIN-VALUE').on('keypress', function(e) {
+        var keys = ['0','1','2','3','4','5','6','7','8','9','.'];
+        return keys.indexOf(event.key) > -1;
+    });
+}
+function IconSettings_Save() {
+    var path = get("#ICON-PATH").value;
+    if(strweight(path)) {
+        page.icon = path;
+    }
+    showcontent(null);
+}
+function OpenIconSettings() {
+    clear_settings();
+    var innerhtml = '<div class="content">';
+    innerhtml += '<h1 class="mini-header middle" style="margin-top:15px;">Иконка сайта</h1>';
+    innerhtml += '<h1 class="mini-header">Путь</h1>';
+    innerhtml += '<input type="text" class="inputfield" id="ICON-PATH">';
+    innerhtml += '<input type="button" class="button" value="Готово" onclick="IconSettings_Save()">';
+    innerhtml += '<input type="button" class="button" value="Отмена" style="margin-top:10px;margin-bottom:15px;" onclick="showcontent(null)">';
+    innerhtml += '</div>';
+    showcontent(null,content_str=innerhtml,width="400",height="300");
+    get("#ICON-PATH").value = page.icon;
+}
+
+ActivateWindowsAnimations();
 light(true);
-UpdateObjList();

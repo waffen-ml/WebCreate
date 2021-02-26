@@ -40,27 +40,43 @@
     all rights reversed
 */
 
-@media(min-width:1080px) {
+@media(min-width:1400px) {
     .actionFrame {
         width: 20vw;
         height: calc(20vw * 0.75);
     }
     .section-header {
-        font-size:4.5vw;
+        font-size:3.5vw;
     }
     .content-window .section-header {
         margin-left:1.3vw;
     }
     .mini-header {
-        font-size:calc(4.5vw * 0.696);
+        font-size:2.5vw;
+        
+    }
+    .biggest {
+        font-size:3.5vw;
+    }
+    .bigger {
+        font-size:3.2vw;
+    }
+    .middle {
+        font-size:2.9vw;
+    }
+    .little {
+        font-size:2.5vw;
     }
     .actionPanel .AP-header {
-        font-size:4.5vw
+        font-size:3.5vw;
     }
     .button {
         width:calc(210 * 0.075vw);
         height: calc(210 * 0.075vw * 0.175);
         font-size:2vw;
+    }
+    .smallfont {
+        font-size:1.6vw;
     }
     .itemlist {
         width:42vw;
@@ -70,7 +86,7 @@
         font-size:1.5vw;
     }
     .menu {
-        height:5.5vh;
+        height:4.5vh;
     }
     .logo {
         height:77.7%;
@@ -79,11 +95,11 @@
         font-size:2.1vw;
     }
     .menu-sections input[type='button'] {
-        font-size:1.5vw;
+        font-size:1.3vw;
     }
     .content-window {
-        top:5.5vh;
-        height: 94.5vh;
+        top:4.5vh;
+        height: 95.5vh;
     }
     .text {
         font-size:2vw;
@@ -99,6 +115,7 @@
         margin-left:1.3vw;
     }
     .actionFrame a {
+        margin-top:3px;
         font-size:1.5vw;
     }
     .inputfield {
@@ -109,4 +126,81 @@
     .link {
         font-size:1.8vw;
     }
+    /* ELEMENT ITEM IN LIST */
+    .item {
+        height:4.6vh;
+    }
+    .item img {
+        width:auto;
+        height:87.5%;
+    }
+    .item p {
+        font-size:2.55vh;
+    }
+    .item input[type="button"] {
+        transform:scale(1vw);
+    }
+    .typebutton {
+        width:calc(300 * 0.08vw);
+        height:calc(300 * 0.08vw * 0.116);
+        font-size:3.2vh;
+    }
+    .select {
+        width:calc(250 * 0.075vw);
+        height:calc(250 * 0.075vw * 0.128);
+        font-size:3.2vh;
+    }
+    .text-tip {
+        font-size:1.1vw;
+    }
+    .radio {
+        font-size:1.5vw;
+    }
+    .radio input {
+        width:1vw;
+        height:1vw;
+    }
+    .range-header {
+        font-size:2vw;
+    }
+    .color-display {
+        width:5vw;
+        height:5vw;
+    }
+    .mini-inputfield {
+
+        font-size:1.25vw;
+        width:3.5vw;
+    }
+    #IMAGE-PREVIEW {
+        font-size:1vw;
+        width:15vw;
+        height:20vh;
+    }
+    .article {
+        font-size:1.85vw;
+    }
+    .projectFrame {
+        width:calc(300 * 0.07vw);
+        height:calc(300 *0.75* 0.07vw);
+    }
+    .projectFrame a {
+        font-size:1.5vw;
+    }
+    .projectFrameButton {
+        width:3vw;
+        height:3vw;
+    }
+    .actionTip {
+        font-size:1.56vw;
+    }
+    .filemanager {
+        font-size:1.8vw;
+        width:85%;
+        max-width:550px;
+    }
+    .filezone {
+        font-size:2.6vw;
+    }
+    
 }

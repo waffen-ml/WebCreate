@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WebCreate Меню</title>
+        <script type="text/javascript" src="jquery.js"></script>
+        <link href="style.css" type="text/css" rel="stylesheet">
+        <link href="media.css" type="text/css" rel="stylesheet">
+        <link rel="icon" href="favicon.png">
+    </head>
+    <body>
+        <a id="download" href="#" download></a>
+        <div class="menu">
+            <div class="logo-holder">
+                <img class="logo" src="logo.png">
+                <span class="beta">BETA</span>
+            </div>
+            <div class="menu-sections">
+                <input onclick="Enable('projects')"type="button" value="Проекты">
+                <input onclick="Enable('about')" type="button" value="О нас">
+            </div>
+            <input type="button" class="burger-menu" onclick="BurgerMenuClick()">
+            <div class="side-menu">
+                <input onclick="BurgerMenuClick();Enable('projects')"type="button" value="Проекты">
+                <input onclick="BurgerMenuClick();Enable('about')" type="button" value="О нас">
+            </div>
+        </div>
+
+        <div class="content-window" id="projects">
+            <div class="flex-content">
+                <h1 class="section-header">Проекты</h1>
+                <div class="project-holder">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="content-window" id="about">
+            <div class="flex-content">
+                <h1 class="section-header">О нас</h1>
+                <p class="text">Web Create - бесплатный конструктор сайтов, который позволяющий быстро создать веб-страничку из нескольких простых составляющих.<br>
+                    Кулинарный сайт, резюме, интервью, статьи - это лишь малый перечень из того, что вы можете сделать с помощью этого инструмента.
+                </p>
+                <p class="text">Работая, вы можете не беспокоиться за положение элементов на сайте - редактор сам соберёт их в столбец. Также присутствует возможность
+                    глубокого редактирования дизайна разных объектов: кнопок, изображений, строк ввода и так далее.
+                </p>
+                <p class="text">Web Create, в отличие от Wix и Word Press, не так функционален, однако прост и быстр. Также, данный редактор частично учит пользователя работе с сайтом.
+                </p>
+                <p class="text" style="margin-bottom:10px">Проект находится в состоянии бета, однако, мы амбициозно настроены и имеем множество идей для улучшения нашего сайта:</p>
+                <ul style="margin-top:0;">
+                    <li class="text">Написать краткий обзор в язык CSS, который позволит неопытному пользователю работать с дизайном на сайте.</li>
+                    <li class="text">Сделать адаптивность редактора и сайтов, которые на нём создаются.</li>  
+                    <li class="text">Добавить больше настроек и элементов, при этом, не усложнить работу.</li>  
+                    <li class="text">Сделать главное меню сайта, где пользователь сможет создавать, удалять и производить другие махинации с проектами.</li>  
+                    <li class="text">Добавить функцию сбора информации на готовом сайте, чтобы было возможным составлять различные формы для отправки: анкеты, голосования и т.д.</li>  
+                    <li class="text">Улучшить дизайн редактора.</li> 
+                </ul>
+                <p class="text"><strong>С уважением, команда DoneWeb.</strong></p>
+            </div>
+        </div>
+
+        <div class="floating-window"></div>
+        <script src="utility.js"></script>
+        <script src="script.js"></script>
+        <script>
+            Enable("projects");
+            let projects = new Projects();
+            projects.load();
+            UpdateProjectHolder();
+
+        </script>
+    </body>
+</html>
