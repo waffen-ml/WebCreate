@@ -1045,5 +1045,6 @@ function OpenIconSettings() {
     get("#ICON-PATH").value = page.icon;
 }
 
+alert($(document).width());
 ActivateWindowsAnimations();
 light(true);
