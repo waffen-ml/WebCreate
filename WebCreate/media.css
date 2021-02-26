@@ -40,6 +40,9 @@
     .item {
         height:50px;
     }
+    .content-window {
+        background:pink;   
+    }
 }
 
 
