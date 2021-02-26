@@ -10,6 +10,18 @@ function _allValues() {
     alert(out);
 }
 
+function _maxlength(str) {
+    var width = $(document).width();
+    var max = 0;
+    if(width > 1400) max = 30;
+    else if(width <= 1280 && width > 700) max=25;
+    else if(width <= 700 && width > 500) max=25;
+    else if(width <= 500) max=20;
+    else max = 20;
+    if(str.length <= max) return str;
+    else return str.substring(0,max) + "...";
+}
+
 function _firstBigLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -97,7 +109,7 @@ function UpdateObjList(id="elementlist") {
     DeleteChildren(obj);
     var innerHtml = "";
     for(var a = 0; a < page.elements.length;a+=1) {
-        innerHtml += '<div class="item"><img class="obj-icon" src="icons/' + page.elements[a].type+ '.png"><p>' +page.elements[a].id+'['+ page.elements[a].type+']</p><div class="obj-buttons"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(-90deg);" onclick="UpperObj(' + a +')"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(90deg);" onclick="LowerObj(' + a +')"><input type="button" style="background-image:url(' +"'" + 'icons/info.png'+ "'"+')" onclick="OpenObjSettings(' +a +')" class="obj-button"><input type="button"  style="background-image:url(' +"'" + 'icons/delete.png'+ "'"+')" class="obj-button" onclick="DeleteObj('+a+')"></div></div>';
+        innerHtml += '<div class="item"><img class="obj-icon" src="icons/' + page.elements[a].type+ '.png"><p>' +_maxlength(page.elements[a].id+'['+ page.elements[a].type+']') + '</p><div class="obj-buttons"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(-90deg);" onclick="UpperObj(' + a +')"><input type="button" style="background-image:url(' +"'"+"icons/arrow.png" + "'"+ ');transform:rotate(90deg);" onclick="LowerObj(' + a +')"><input type="button" style="background-image:url(' +"'" + 'icons/info.png'+ "'"+')" onclick="OpenObjSettings(' +a +')" class="obj-button"><input type="button"  style="background-image:url(' +"'" + 'icons/delete.png'+ "'"+')" class="obj-button" onclick="DeleteObj('+a+')"></div></div>';
     }
     if(innerHtml == "") {
         innerHtml = '<p class="hidden-text">Нет элементов.</p>';
@@ -1045,6 +1057,5 @@ function OpenIconSettings() {
     get("#ICON-PATH").value = page.icon;
 }
 
-alert($(document).width());
 ActivateWindowsAnimations();
 light(true);

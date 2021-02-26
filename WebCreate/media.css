@@ -33,15 +33,27 @@
         display:block;
     }
 }
-@media(max-width:700px) {
+@media(max-width:600px) {
     .item p {
-        font-size:20px;
+        font-size:21px;
     }
     .item {
         height:50px;
     }
-    .content-window {
-        background:pink;   
+    .mini-header {
+        font-size:30px;
+    }
+    .biggest {
+        font-size:45px;
+    }
+    .bigger {
+        font-size:42px;
+    }
+    .middle {
+        font-size:40px;
+    }
+    .little {
+        font-size:38px;
     }
 }
 
