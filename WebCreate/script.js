@@ -1,4 +1,4 @@
-let download_gadget = document.getElementById("download");
+﻿let download_gadget = document.getElementById("download");
 let floating_window_open = false;
 let fw = document.getElementsByClassName("floating-window")[0];
 
@@ -15,8 +15,9 @@ function _maxlength(str) {
     var max = 0;
     if(width > 1400) max = 30;
     else if(width <= 1280 && width > 700) max=25;
-    else if(width <= 700 && width > 500) max=25;
-    else if(width <= 500) max=20;
+    else if(width <= 700 && width > 500) max=20;
+    else if(width <= 500 && width > 400) max=15;
+    else if(width <= 400) max = 10;
     else max = 20;
     if(str.length <= max) return str;
     else return str.substring(0,max) + "...";
@@ -57,7 +58,6 @@ function ActivateWindowsAnimations() {
         });
     }
 }
-
 function Enable(contentwindowid) {
     if(!allowed()) return;
     var content_window = get("#"+ contentwindowid);
@@ -315,7 +315,7 @@ function OpenObjSettings(id) {
     }
     //ОТСТУП
     innerhtml += '<h1 class="mini-header">Отступ</h1>';
-    innerhtml += '<input type="text" class="inputfield" onfocusout="MarginSettings_Update()" id="MARGIN-VALUE">';
+    innerhtml += '<input type="text" class="inputfield" id="MARGIN-VALUE">';
     innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction"  type="radio" id="UNIT-PX">Пиксели</p>';
     innerhtml += '<p class="radio"><input style="margin-right:5px;" name="direction"  type="radio" id="UNIT-CM">Сантиметры</p>';
     //ОТСТУП
@@ -408,7 +408,6 @@ function get(selector) {
     else if(selector.charAt(0) == ".") return document.getElementsByClassName(selector.slice(1))[0];
     return null;
 }
-
 function ValidId(id,obj_id=-1) {
     var exist = false;
     for(var a = 0; a < page.elements.length;a+=1) {
@@ -447,6 +446,7 @@ function GetObjIndexById(id) {
 }
 
 function UpperObj(id) {
+    if(!allowed()) return;
     if(page.elements.length < 2 || id < 1) return;
     var forward_element = page.elements[id-1];
     page.elements[id - 1] = page.elements[id];
@@ -454,6 +454,7 @@ function UpperObj(id) {
     UpdateObjList();
 }
 function LowerObj(id) {
+    if(!allowed()) return;
     if(page.elements.length < 2 || id >= page.elements.length-1) return;
     var back_element = page.elements[id+1];
     page.elements[id + 1] = page.elements[id];
@@ -461,6 +462,7 @@ function LowerObj(id) {
     UpdateObjList();
 }
 function DeleteObj(id) {
+    if(!allowed()) return;
     var confirmed = AdvancedConfirm("Вы точно хотите удалить этот элемент?");
     if(!confirmed) return;
     page.elements.splice(id,1);
@@ -737,6 +739,7 @@ function BurgerMenuClick() {
         burger_menu_activated=false;
     }
     else {
+        if(!allowed()) return;
         get(".side-menu").style.transform = "none";
         get(".side-menu").style.right = "0px";
         burger_menu_activated=true;
@@ -779,6 +782,7 @@ function AdvancedJSONparse(json) {
 }
 
 function PrintElement(element = page) {
+    if(!allowed()) return;
     var innerhtml ='<div class="content">';
     innerhtml += '<h1 class="mini-header">Состав сайта</h1>';
     innerhtml += '<p style="font:normal 22px arial;width:95%">' +AdvancedJSONstringify(element) +'</p>';
@@ -852,6 +856,7 @@ function DeleteProject(id_) {
     projects.projects.splice(id,1);
     projects.save();
     UpdateProjectHolder();
+    if(!allowed()) showcontent(null);
 }
 function SaveProjectSettings(id_) {
     var id = parseInt(id_);
@@ -873,10 +878,10 @@ function ProjectSettings_loadfromfile_changed(id_) {
         var id=parseInt(id_);
         var file = get("#PROJECT-FROM-FILE").files[0];
         var reader = new FileReader();
-        reader.readAsText(file,'CP1251');
+        reader.readAsText(file,'ANSI');
         reader.onloadend = function() {
             var str = reader.result;
-            localStorage.setItem("slot" + id,str);
+            localStorage.setItem("slot" + projects.projects[id].slot,str);
             AdvancedAlert("Успешно!");
         }
     }catch{
@@ -908,10 +913,10 @@ function ProjectSettings_loadfromfile(id_) {
             evt.preventDefault();
             var files = evt.dataTransfer.files;
             var reader = new FileReader();
-            reader.readAsText(files[0],'CP1251');
+            reader.readAsText(files[0],'ANSI');
             reader.onloadend = function() {
                 var str = reader.result;
-                localStorage.setItem("slot" + id,str);
+                localStorage.setItem("slot" + projects.projects[id].slot,str);
                 AdvancedAlert("Успешно!");
             }
         }catch {
@@ -930,7 +935,7 @@ function ProjectSettings(id_) {
     var innerhtml = '<div class="flex-content">';
     innerhtml += '<h1 class="mini-header middle">Настройки проекта</h1>';
     innerhtml += '<h1 class="mini-header">Название</h1>';
-    innerhtml += '<input type="text" id="PROJECT-NAME" class="inputfield" value="' +  projects.projects[id].name+'">';
+    innerhtml += '<input type="text" id="PROJECT-NAME" style="text-align:center" class="inputfield" value="' +  projects.projects[id].name+'">';
     innerhtml += '<h1 class="mini-header">Назначение</h1>';
     innerhtml += '<select class="select" id="PROJECT-APPOINTMENT" >';
     innerhtml += '<option value="статья">Статья</option>';
@@ -941,7 +946,7 @@ function ProjectSettings(id_) {
     innerhtml += '<input type="button" class="button" value="Сохранить" onclick="SaveProjectSettings(' +id +')">';
     innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Скачать" onclick="projects.projects['+id+'].download()">';
     innerhtml += '<input type="button" class="button smallfont" style="margin-top:10px;" value="Загрузить из файла" onclick="ProjectSettings_loadfromfile('+id+')">';
-    innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Удалить" onclick="SaveProjectSettings(' +id +')">';
+    innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Удалить" onclick="DeleteProject(' +id +');showcontent(null)">';
     innerhtml += '<input type="button" class="button" style="margin-top:10px;" value="Назад" onclick="showcontent(null)">';
     innerhtml += '</div>';
     showcontent(null,content_str=innerhtml,width="430",height="545");
@@ -1001,6 +1006,7 @@ function MarginSettings_Update() {
     get("#MARGIN-PREVIEW-ELEMENT").style.marginTop = margin+format;
 }
 function OpenMarginSettings() {
+    if(!allowed()) return;
     clear_settings();
     var innerhtml = '<div class="content">';
     innerhtml += '<h1 class="mini-header middle" style="margin-top:15px;">Отступ элементов</h1>';
@@ -1045,6 +1051,7 @@ function IconSettings_Save() {
     showcontent(null);
 }
 function OpenIconSettings() {
+    if(!allowed()) return;
     clear_settings();
     var innerhtml = '<div class="content">';
     innerhtml += '<h1 class="mini-header middle" style="margin-top:15px;">Иконка сайта</h1>';

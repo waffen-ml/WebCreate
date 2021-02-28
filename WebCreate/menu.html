@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>WebCreate Меню</title>
+        <title>WebCreate | Меню</title>
         <script type="text/javascript" src="jquery.js"></script>
         <link href="style.css" type="text/css" rel="stylesheet">
         <link href="media.css" type="text/css" rel="stylesheet">
@@ -14,16 +14,15 @@
         <div class="menu">
             <div class="logo-holder">
                 <img class="logo" src="logo.png">
-                <span class="beta">BETA</span>
             </div>
             <div class="menu-sections">
                 <input onclick="Enable('projects')"type="button" value="Проекты">
-                <input onclick="Enable('about')" type="button" value="О нас">
+                <input onclick="Enable('guide')" type="button" value="Начало работы">
             </div>
             <input type="button" class="burger-menu" onclick="BurgerMenuClick()">
             <div class="side-menu">
                 <input onclick="BurgerMenuClick();Enable('projects')"type="button" value="Проекты">
-                <input onclick="BurgerMenuClick();Enable('about')" type="button" value="О нас">
+                <input onclick="BurgerMenuClick();Enable('guide')" type="button" value="Начало работы">
             </div>
         </div>
 
@@ -36,27 +35,96 @@
             </div>
         </div>
 
-        <div class="content-window" id="about">
+        <div class="content-window" id="guide">
             <div class="flex-content">
-                <h1 class="section-header">О нас</h1>
-                <p class="text">Web Create - бесплатный конструктор сайтов, который позволяющий быстро создать веб-страничку из нескольких простых составляющих.<br>
-                    Кулинарный сайт, резюме, интервью, статьи - это лишь малый перечень из того, что вы можете сделать с помощью этого инструмента.
-                </p>
-                <p class="text">Работая, вы можете не беспокоиться за положение элементов на сайте - редактор сам соберёт их в столбец. Также присутствует возможность
-                    глубокого редактирования дизайна разных объектов: кнопок, изображений, строк ввода и так далее.
-                </p>
-                <p class="text">Web Create, в отличие от Wix и Word Press, не так функционален, однако прост и быстр. Также, данный редактор частично учит пользователя работе с сайтом.
-                </p>
-                <p class="text" style="margin-bottom:10px">Проект находится в состоянии бета, однако, мы амбициозно настроены и имеем множество идей для улучшения нашего сайта:</p>
-                <ul style="margin-top:0;">
-                    <li class="text">Написать краткий обзор в язык CSS, который позволит неопытному пользователю работать с дизайном на сайте.</li>
-                    <li class="text">Сделать адаптивность редактора и сайтов, которые на нём создаются.</li>  
-                    <li class="text">Добавить больше настроек и элементов, при этом, не усложнить работу.</li>  
-                    <li class="text">Сделать главное меню сайта, где пользователь сможет создавать, удалять и производить другие махинации с проектами.</li>  
-                    <li class="text">Добавить функцию сбора информации на готовом сайте, чтобы было возможным составлять различные формы для отправки: анкеты, голосования и т.д.</li>  
-                    <li class="text">Улучшить дизайн редактора.</li> 
-                </ul>
-                <p class="text"><strong>С уважением, команда DoneWeb.</strong></p>
+                <h1 class="section-header">Начало работы</h1>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:15px;">Создание элементов</h1>
+                <p class="text" style="margin-top:5px;">Создать элемент в данном редакторе довольно просто. Вы можете сделать это, кликнув по одной из ячеек в колонке 'Популярные', либо, нажав кнопку 'Создать'.</p>
+                <div class="guide-image-holder">
+                    <img style="width:30%" src="guide/кнопка-создать.JPG" class="guide-image">
+                    <img style="width:30%" src="guide/колонка-популярные.JPG" class="guide-image">
+                </div>
+                <p class="text" style="margin-top:20px;">Если вы нажали на кнопку 'Создать', появится окошко с настройкой создания нового элемента. Верхний выпадающий список - тип элемента. Нижнее поле ввода - его индекс.</p>
+                <div class="guide-image-holder">
+                    <img style="width:33%" src="guide/создать-элемент.JPG" class="guide-image">
+                </div>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:40px;">Редактирование элементов</h1>
+                <p class="text" style="margin-top:5px;">Чтобы редактировать элемент, нажмите на кнопку со значком троеточие. После этого откроется окошко с настройками.</p>
+                <div class="guide-image-holder">
+                    <img style="width:45%" src="guide/троеточие.JPG" class="guide-image">
+                    <img style="width:30%" src="guide/настройки.JPG" class="guide-image">
+                </div>
+                <p class="text" style="margin-top:20px;">Здесь вы можете редактировать элемент. Когда закончите, нажмите кнопку 'Сохранить'.</p>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:40px;">Настройки сайта</h1>
+                <p class="text" style="margin-top:5px;">Открыв вкладку настройки, вы сможете изменить имя сайта и файла. После их изменения необходимо нажать на кнопку 'Сохранить'.<br>Ниже вы можете увидеть кнопку 'Компиляция', нажав на которую вы скачаете HTML файл сайта.</p>
+                <div class="guide-image-holder">
+                    <img style="width:40%" src="guide/вкладка-настройки.JPG" class="guide-image">
+                </div>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:40px;">Дизайн</h1>
+                <h1 class="mini-header little" style="text-align:center;margin-top:20px;">Дизайн элементов</h1>
+                <p class="text" style="margin-top:5px;">Если вам надо поменять дизайн элемента, нажмите на кнопку с иконкой пишущего карандаша. Откроется окошко с настройками дизайна.</p>
+                <div class="guide-image-holder">
+                    <img style="width:40%" src="guide/дизайн-лист.JPG" class="guide-image"> 
+                    <img style="width:55%" src="guide/настройки-дизайна1.JPG" class="guide-image">
+                </div>
+                <p class="text" style="margin-top:25px;">Для изменения этих настроек понадобится хотя-бы минимальное владение CSS. Промотаем ниже.</p>
+                <div class="guide-image-holder">
+                    <img style="width:55%" src="guide/настройки-дизайна2.JPG" class="guide-image">
+                </div>  
+                <p class="text" style="margin-top:25px;">Кнопка 'Добавить' добавляет аттрибут дизайна следуя введённому вами названию. Чтобы удалить аттрибут, нажмите на крестик у его названия. Когда закончите, нажмите кнопку 'Сохранить'</p>
+                <h1 class="mini-header little" style="text-align:center;margin-top:40px;">Задний фон</h1>
+                <p class="text" style="margin-top:25px;">Чтобы открыть настройки заднего фона, нажмите на ячейку 'Задний фон' в колонке 'Другое'.</p>
+                <div class="guide-image-holder">
+                    <img style="width:40%" src="guide/ячейка-задний-фон.JPG" class="guide-image"> 
+                    <img style="width:35%" src="guide/настройки-заднего-фона.JPG" class="guide-image">
+                </div>
+                <p class="text" style="margin-top:25px;">Здесь находятся различные типа фона, один из которых вы можете выбрать, кликнув по нему, после чего откроются параметры выбранного типа.</p>
+                <h1 class="mini-header little" style="text-align:center;margin-top:40px;">Иконка сайта</h1>
+                <p class="text" style="margin-top:25px;">Чтобы открыть параметры иконки, нажмите на ячейку 'Иконка сайта' в колонке 'Другое'.</p>
+                <div class="guide-image-holder">
+                    <img style="width:40%" src="guide/ячейка-иконка-сайта.JPG" class="guide-image"> 
+                    <img style="width:35%" src="guide/настройки-иконки.JPG" class="guide-image">
+                </div>
+                <p class="text" style="margin-top:25px;">Там вы сможете задать путь для иконки.</p>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:40px;">Расположение элементов</h1>
+                <h1 class="mini-header little" style="text-align:center;margin-top:20px;">Отступ элементов</h1>
+                <p class="text" style="margin-top:25px;">Настроить отступы элементов можно, нажав на ячейку 'Отступ элементов' в колонке 'Другие'.</p>
+                <div class="guide-image-holder">
+                    <img style="width:45%" src="guide/ячейка-отступ-элементов.JPG" class="guide-image"> 
+                    <img style="width:35%" src="guide/настройки-отступа.JPG" class="guide-image">
+                </div>
+                <p class="text" style="margin-top:25px;">Здесь вы сможете настроить отступ и задать еденицу измерения. Поле с галочкой 'Применить для всех элементов' означает, что у всех элементов отступы сбросятся до значения, заданного вами. Когда закончите, нажмите на кнопку 'Готово', расположенную ниже.<br>Вы также можете назначить для каждого элемента свой отступ. Для этого перейдите в настройки элемента, промотайте вниз и аналогично задайте отступ.</p>
+                <div class="guide-image-holder">
+                    <img style="width:45%" src="guide/отступ-элементов.JPG" class="guide-image"> 
+                </div>
+                <h1 class="mini-header little" style="text-align:center;margin-top:40px;">Порядок элементов</h1>
+                <p class="text" style="margin-top:25px;">Вы можете изменить порядок элементов на странице, нажимая на стрелки в списке.</p>
+                <div class="guide-image-holder">
+                    <img style="width:45%" src="guide/порядок-элементов.JPG" class="guide-image"> 
+                </div>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:40px;">Сбор информации</h1>
+                <p class="text" style="margin-top:25px;">Делая сайт, вы можете настроить сбор информации. С помощью этой функции можно создавать формы, информация из которых после заполнения отправляется вам на почту.<br>Для начала, перейдите в настройки сайта и нажмите кнопку 'Сбор информации'.</p>
+                <div class="guide-image-holder">
+                    <img style="width:37%" src="guide/кнопка-сбора-информации.JPG" class="guide-image"> 
+                </div>
+                <div class="guide-image-holder" style="margin-top:15px">
+                    <img style="width:50%" src="guide/настройки-сбора-информации1.JPG" class="guide-image"> 
+                </div>
+                <p class="text" style="margin-top:25px;">Нажмите кнопку 'Включить'</p>
+                <div class="guide-image-holder" >
+                    <img style="width:50%" src="guide/настройки-сбора-информации2.JPG" class="guide-image"> 
+                </div>
+                <p class="text" style="margin-top:25px;">Появится поле для ввода почты, куда вам будет отправляться информация с вашего сайта.<br>Хорошо, режим сбора информации включен. Чтобы данные собирались с элементов, нужно включить это в их настройках.</p>
+                <div class="guide-image-holder">
+                    <img style="width:50%" src="guide/настройки-сбора-информации3.JPG" class="guide-image"> 
+                </div>
+                <p class="text" style="margin-top:25px;">Если отмечено поле с галкой 'Обязательное заполнение', то отправить форму, если этот элемент не заполнен, не получится.<br>Готово! На вашем сайте появилась кнопка, нажав на которую, вы отправите информацию на почту. Чтобы сменить её, просто создайте новую кнопку с индексом 'отправить'.</p>
+                <h1 class="mini-header middle" style="text-align:center;margin-top:40px;">Просмотр сайта</h1>
+                <p class="text" style="margin-top:25px;">Чтобы посмотреть сайт, достаточно перейти во вкладку 'Просмотр'.</p>
+                <div class="guide-image-holder" style="margin-bottom:50px">
+                    <img style="width:50%" src="guide/просмотр.JPG" class="guide-image"> 
+                </div>
+
             </div>
         </div>
 

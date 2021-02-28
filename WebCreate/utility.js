@@ -125,6 +125,9 @@ class Page {
             ]),
             new ClassicDesign("список",[
                 new DesignAttribute("font","normal 21px arial")
+            ]),
+            new ClassicDesign("связь радиокнопок",[
+                new DesignAttribute("font","normal 21px arial")
             ])
         ];
         this.fileName = "website";
@@ -182,7 +185,7 @@ class Page {
             var design =page.elements[a].getWholeDesign();
             var getv = function(what){return page.elements[a].getValue(what);};
             var getd = function(what){return page.elements[a].getDesignParameter(what);};
-            design += "margin-top:" + page.elements[a].margin + ";";
+            design += "margin-top:" + page.elements[a].margin + ";margin-bottom:0;";
             if(page.elements[a].type == "кнопка") {
                 var onclick = page.elements[a].getValue("функция").replace(/(?:\r\n|\r|\n)/g," ");
                 if(page.info_collection.enabled && page.elements[a].id.toLowerCase() == "отправить" && !collectInfoButtonExists) {
@@ -195,7 +198,6 @@ class Page {
             else if(page.elements[a].type == "текст") {
                 design += "max-width:" + page.elements[a].getValue("максимальная ширина") + "px;";
                 design += "font-size:" + page.elements[a].getValue("шрифт") + "px;";
-                design+="word-break:break-all;";
                 output += '<p id="' +page.elements[a].id +'" style="' +design + '">' + ConvertNewLinesToBr(page.elements[a].getValue("текст")) + '</p>';
             }
             else if(page.elements[a].type == "заголовок") {

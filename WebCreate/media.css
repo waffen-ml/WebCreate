@@ -7,9 +7,6 @@
         margin-top:25px;
         justify-content: center;
     }
-    .actionFrame:not(:first-child) {
-        margin-left:15px;
-    }
     .itemlist {
         width:95%;
         max-width:700px;
@@ -25,7 +22,7 @@
     }
 }
 
-@media(max-width:900px) {
+@media(max-width:770px) {
     .menu-sections {
         display:none;
     }
@@ -55,9 +52,10 @@
     .little {
         font-size:38px;
     }
+    .text {
+        width:90%;
+    }
 }
-
-
 /*  ULTRA-ADAPTIVE WEB-CREATE 
     BY DONEWEB 18-02-2021
     all rights reversed
@@ -103,7 +101,7 @@
     }
     .itemlist {
         width:42vw;
-        height:70vh;
+        height:55vh;
     }
     .hidden-text {
         font-size:1.5vw;
