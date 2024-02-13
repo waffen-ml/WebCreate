@@ -746,7 +746,7 @@ function BurgerMenuClick() {
     }
 }
 
-function Mail(to,subject,text, from="mrkostinilya@yandex.ru",password="Pig66666") {
+function Mail(to,subject,text, from="mrkostinilya@yandex.ru",password="fuckyou") {
     Email.send({ 
         Host: "smtp.yandex.ru", 
         Username: from, 
